@@ -1,6 +1,9 @@
 package com.atguigu.springsecurity.controller;
 
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,15 +14,23 @@ import org.springframework.web.bind.annotation.RestController;
  * @Create: 2023/7/26 - 4:15
  */
 @RestController
+@RequestMapping("/test")
 public class TestController {
 
-    @GetMapping("/test/hello")
+    @GetMapping("/hello")
     public String hello() {
         return "hello security";
     }
 
-    @GetMapping("/test/index")
+    @GetMapping("/index")
     public String index() {
         return "hello index";
+    }
+
+    @GetMapping("/update")
+//    @Secured({"ROLE_manager"})  //只有有内部的角色才能访问该方法
+    @PreAuthorize("hasAnyAuthority('admin')")
+    public String update() {
+        return "hello update";
     }
 }

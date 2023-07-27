@@ -38,12 +38,24 @@ public class SecurityCustomizeConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //退出
+        http.logout().logoutUrl("/logout").logoutSuccessUrl("/test/index").permitAll();
+        //配置没有权限跳转自定义页面
+        http.exceptionHandling().accessDeniedPage("/unauth.html");
         http.formLogin()   //自定义登录页面
                 .loginPage("/login.html")  //登录页面设置
                 .loginProcessingUrl("/user/login")  //登录访问路径
-                .defaultSuccessUrl("/test/index").permitAll()  //登录成功跳转路径
+                .defaultSuccessUrl("/success.html").permitAll()  //登录成功跳转路径
                 .and().authorizeRequests()
-                .antMatchers("/","/user/login","/test/hello").permitAll()  //设置那些路径可以直接访问不需要认证
+                .antMatchers("/", "/user/login", "/test/hello").permitAll()  //设置那些路径可以直接访问不需要认证
+                //法1、hasAnyAuthority(),设置基于拥有某一种权限才能访问第一步在配置类第二步在继承UserDetailsService类中设置
+//                .antMatchers("/test/index").hasAuthority("admin")
+                //法2、hasAnyAuthority(),设置基于拥有多种权限才能访问第一步在配置类第二步在继承UserDetailsService类中设置
+//                .antMatchers("/test/index").hasAnyAuthority("admin,manager")
+                //法3、hasRole(),底层增加了ROLE_xxxx
+                .antMatchers("/test/index").hasRole("sale")
+                //法4、hasAnyRole()
+//                .antMatchers("/test/index").hasAnyRole("sale,consumer")
                 .anyRequest().authenticated()
                 .and().csrf().disable(); //关闭csrf防护
     }
