@@ -1,0 +1,22 @@
+server:
+  port: 8111
+
+spring:
+  application:
+    name: springsecurity
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:13306/securitydemo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: abc123
+    type: com.alibaba.druid.pool.DruidDataSource
+#  security:   #配置方式完成登录用户名及密码的获取
+#    user:
+#      name: atguigu
+#      password: atguigu
+
+mybatis-plus:
+  mapperLocations: classpath:mapper/*.xml
+  type-aliases-package: com.atguigu.springsecurity.entity    # 所有Entity别名类所在包
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  #打印sql语句

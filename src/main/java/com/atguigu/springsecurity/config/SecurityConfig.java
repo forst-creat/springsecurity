@@ -17,20 +17,18 @@ import javax.annotation.Resource;
  * @Author: liuyang
  * @Create: 2023/7/26 - 4:23
  */
-@Configuration
+//@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {   //配置类形式，继承WebSecurityConfigurerAdapter，重写configure()
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; //取出密码前需要对密码进行加密，创建密码解析器
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder(); //取出密码前需要对密码进行加密，创建密码解析器
         String password = passwordEncoder.encode("123"); //对密码进行加密
         auth.inMemoryAuthentication().withUser("lucy").password(password).roles("admin");
     }
 
     @Bean
     public PasswordEncoder password() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();  //要求先注入PasswordEncoder的Bean，否则encoderId为null
     }
 }
